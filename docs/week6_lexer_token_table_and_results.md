@@ -25,7 +25,7 @@
 Command used:
 ```bash
 cd src
-./compiler ../test/valid/test3.c
+./compiler ../test/week7/valid/test3.c
 ```
 Observed diagnostics:
 - `Security note (line 1): sensitive identifier 'token'`

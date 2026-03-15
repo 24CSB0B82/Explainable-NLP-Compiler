@@ -59,5 +59,5 @@ arg_list          := arg_list ',' expr | expr | epsilon
 ```
 
 ## Week-5 Sample Programs
-- Valid samples: `test/valid/test1.c`, `test/valid/test2.c`, `test/valid/test3.c`
-- Invalid samples: `test/invalid/test1_missing_semicolon.c`, `test/invalid/test2_bad_expr.c`, `test/invalid/test3_unclosed_block.c`
+- Valid samples: `test/week7/valid/test1.c`, `test/week7/valid/test2.c`, `test/week7/valid/test3.c`
+- Invalid samples: `test/week7/invalid/test1_missing_semicolon.c`, `test/week7/invalid/test2_bad_expr.c`, `test/week7/invalid/test3_unclosed_block.c`

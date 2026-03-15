@@ -22,13 +22,13 @@
   - `1` when any syntax/semantic issue is detected
 
 ## Syntax Validation Results
-### Valid programs (`test/valid`)
+### Valid programs (`test/week7/valid`)
 - `test1.c` -> pass (exit `0`)
 - `test2.c` -> pass (exit `0`)
 - `test3.c` -> pass (exit `0`)
 - `test4_scope_shadow.c` -> pass (exit `0`)
 
-### Invalid syntax programs (`test/invalid`)
+### Invalid syntax programs (`test/week7/invalid`)
 - `test1_missing_semicolon.c` -> fail (exit `1`), syntax recovery triggered
 - `test2_bad_expr.c` -> fail (exit `1`), syntax recovery triggered
 - `test3_unclosed_block.c` -> fail (exit `1`)
@@ -38,8 +38,8 @@
 cd src
 bison -d parser.y
 flex lexer.l
-gcc parser.tab.c lex.yy.c ast.c symbol_table.c -o compiler -lfl
+gcc parser.tab.c lex.yy.c ast.c symbol_table.c correctness_analysis.c -o compiler -lfl
 
-for f in ../test/valid/*.c; do ./compiler "$f"; done
-for f in ../test/invalid/*.c; do ./compiler "$f"; done
+for f in ../test/week7/valid/*.c; do ./compiler "$f"; done
+for f in ../test/week7/invalid/*.c; do ./compiler "$f"; done
 ```

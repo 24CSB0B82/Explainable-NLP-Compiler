@@ -61,9 +61,9 @@ Each symbol stores:
 
 ## Week-8 Semantic Validation
 ### Added tests
-- `test/valid/test4_scope_shadow.c` (scope shadowing valid case)
-- `test/errors/test_week8_redeclaration.c` (redeclaration error)
-- `test/errors/test_week8_use_before_declaration.c` (use-before-declaration error)
+- `test/week7/valid/test4_scope_shadow.c` (scope shadowing valid case)
+- `test/week8/test_week8_redeclaration.c` (redeclaration error)
+- `test/week8/test_week8_use_before_declaration.c` (use-before-declaration error)
 
 ### Results
 - `test4_scope_shadow.c` -> pass (exit `0`)

@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "ast.h"
+#include "correctness_analysis.h"
 #include "symbol_table.h"
 
 int yylex(void);
@@ -304,6 +305,9 @@ int main(int argc, char **argv) {
 
     symtab_init();
     parse_result = yyparse();
+    if (parse_result == 0 && syntax_error_count == 0) {
+        semantic_error_count += run_correctness_analysis(ast_root);
+    }
 
     if (parse_result == 0 && syntax_error_count == 0 && semantic_error_count == 0) {
         printf("Parse successful\n");
