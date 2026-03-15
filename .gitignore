@@ -1,0 +1,34 @@
+# docs files
+docs/Phase_3_Week_5_6_.pdf
+
+# Executables
+compiler
+.a.out
+*.out
+
+# Object files
+*.o
+
+# Flex generated
+lex.yy.c
+
+# Bison generated
+parser.tab.c
+parser.tab.h
+y.tab.c
+y.tab.h
+
+# Build Outputs
+build/
+bin/
+
+# Temporary files
+*.log
+*.tmp
+
+# VS Code settings
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
