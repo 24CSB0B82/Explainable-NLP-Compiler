@@ -53,33 +53,37 @@ test: test-valid test-invalid test-semantic
 
 # Week 7: lexer/parser validation.
 test-valid: build
-	@echo "Running week 7 valid tests..."
+	@echo "Running week 7 valid tests...\n"
 	@for f in $(WEEK7_VALID_DIR)/*.c; do \
 		echo "== $$f =="; \
 		./$(COMPILER_BIN) $$f; \
+		echo ""; \
 	done
 
 test-invalid: build
-	@echo "Running week 7 invalid syntax tests..."
+	@echo "Running week 7 invalid syntax tests...\n"
 	@for f in $(WEEK7_INVALID_DIR)/*.c; do \
 		echo "== $$f =="; \
 		./$(COMPILER_BIN) $$f || true; \
+		echo ""; \
 	done
 
 # Week 8: symbol-table and early semantic checks.
 test-week8: build
-	@echo "Running week 8 semantic tests..."
+	@echo "Running week 8 semantic tests...\n"
 	@for f in $(WEEK8_DIR)/*.c; do \
 		echo "== $$f =="; \
 		./$(COMPILER_BIN) $$f || true; \
+		echo ""; \
 	done
 
 # Week 9: correctness analysis.
 test-week9: build
-	@echo "Running week 9 correctness tests..."
+	@echo "Running week 9 correctness tests...\n"
 	@for f in $(WEEK9_DIR)/*.c; do \
 		echo "== $$f =="; \
 		./$(COMPILER_BIN) $$f || true; \
+		echo ""; \
 	done
 
 test-semantic: test-week8 test-week9
