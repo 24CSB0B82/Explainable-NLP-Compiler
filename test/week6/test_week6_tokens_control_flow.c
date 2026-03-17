@@ -1,0 +1,4 @@
+int count = 2;
+while (count > 0) {
+    count = count - 1;
+}

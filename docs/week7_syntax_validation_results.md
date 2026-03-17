@@ -38,7 +38,7 @@
 cd src
 bison -d parser.y
 flex lexer.l
-gcc parser.tab.c lex.yy.c ast.c symbol_table.c correctness_analysis.c -o compiler -lfl
+gcc parser.tab.c lex.yy.c ast.c symbol_table.c correctness_analysis.c security_audit.c -o compiler -lfl
 
 for f in ../test/week7/valid/*.c; do ./compiler "$f"; done
 for f in ../test/week7/invalid/*.c; do ./compiler "$f"; done

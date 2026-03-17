@@ -58,14 +58,17 @@ Each symbol stores:
 - Semantic checks integrated:
   - redeclaration detection in same scope
   - use-before-declaration detection
+- Week-8 execution mode disables week-9 and week-10 analysis passes so AST output is shown without later-stage checks.
 
 ## Week-8 Semantic Validation
 ### Added tests
+- `test/week8/test_week8_ast_demo.c` (clean AST demonstration case)
 - `test/week7/valid/test4_scope_shadow.c` (scope shadowing valid case)
 - `test/week8/test_week8_redeclaration.c` (redeclaration error)
 - `test/week8/test_week8_use_before_declaration.c` (use-before-declaration error)
 
 ### Results
+- `test_week8_ast_demo.c` -> parse success with AST output
 - `test4_scope_shadow.c` -> pass (exit `0`)
 - `test_week8_redeclaration.c` -> semantic fail (exit `1`)
 - `test_week8_use_before_declaration.c` -> semantic fail (exit `1`)

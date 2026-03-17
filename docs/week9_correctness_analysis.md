@@ -54,3 +54,5 @@
 make build
 make week9
 ```
+
+Week 9 runs the compiler in `--week9` mode so correctness analysis is enabled while the week-10 security audit remains disabled.

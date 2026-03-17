@@ -2,6 +2,7 @@
 docs/Phase_3_Week_5_6_.pdf
 
 # Executables
+lexer_driver
 compiler
 .a.out
 *.out

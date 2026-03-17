@@ -5,6 +5,7 @@
 
 #include "ast.h"
 #include "correctness_analysis.h"
+#include "security_audit.h"
 #include "symbol_table.h"
 
 int yylex(void);
@@ -14,6 +15,9 @@ extern FILE *yyin;
 
 static int syntax_error_count = 0;
 static int semantic_error_count = 0;
+static int security_warning_count = 0;
+static int enable_correctness_analysis = 1;
+static int enable_security_audit = 1;
 static AstNode *ast_root = NULL;
 static char current_decl_type[16] = "";
 
@@ -294,11 +298,28 @@ arg_list
 
 int main(int argc, char **argv) {
     int parse_result;
+    const char *input_path = NULL;
+    int i;
 
-    if (argc > 1) {
-        yyin = fopen(argv[1], "r");
+    for (i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--week8") == 0) {
+            enable_correctness_analysis = 0;
+            enable_security_audit = 0;
+        } else if (strcmp(argv[i], "--week9") == 0) {
+            enable_correctness_analysis = 1;
+            enable_security_audit = 0;
+        } else if (strcmp(argv[i], "--week10") == 0) {
+            enable_correctness_analysis = 1;
+            enable_security_audit = 1;
+        } else {
+            input_path = argv[i];
+        }
+    }
+
+    if (input_path != NULL) {
+        yyin = fopen(input_path, "r");
         if (yyin == NULL) {
-            fprintf(stderr, "Error: cannot open input file '%s'\n", argv[1]);
+            fprintf(stderr, "Error: cannot open input file '%s'\n", input_path);
             return 1;
         }
     }
@@ -306,7 +327,12 @@ int main(int argc, char **argv) {
     symtab_init();
     parse_result = yyparse();
     if (parse_result == 0 && syntax_error_count == 0) {
-        semantic_error_count += run_correctness_analysis(ast_root);
+        if (enable_correctness_analysis) {
+            semantic_error_count += run_correctness_analysis(ast_root);
+        }
+        if (enable_security_audit) {
+            security_warning_count = run_security_audit(ast_root);
+        }
     }
 
     if (parse_result == 0 && syntax_error_count == 0 && semantic_error_count == 0) {
@@ -315,12 +341,18 @@ int main(int argc, char **argv) {
             printf("\nAST:\n");
             ast_print(ast_root, 0);
         }
+        if (security_warning_count > 0) {
+            fprintf(stderr, "Security audit reported %d warning(s)\n", security_warning_count);
+        }
     } else {
         if (parse_result == 0 && syntax_error_count > 0) {
             fprintf(stderr, "Parse completed with %d syntax error(s)\n", syntax_error_count);
         }
         if (semantic_error_count > 0) {
             fprintf(stderr, "Semantic analysis found %d issue(s)\n", semantic_error_count);
+        }
+        if (security_warning_count > 0) {
+            fprintf(stderr, "Security audit reported %d warning(s)\n", security_warning_count);
         }
         parse_result = 1;
     }

@@ -17,18 +17,18 @@
 - Recognizes identifiers, numbers, and escaped-string literals.
 - Reports lexical error for unknown characters.
 
-## Security-Oriented Lexical Checks
-- Sensitive identifiers flagged: `password`, `passwd`, `secret`, `token`, `api_key`
-- Unsafe functions flagged: `gets`, `strcpy`, `strcat`, `sprintf`, `scanf`
+## Security Note
+- The lexer now focuses only on tokenization and lexical errors.
+- Security detection for sensitive identifiers and unsafe functions was moved to the dedicated week-10 security audit module.
+
+## Week-6 Token Dump
+- Use the standalone lexer driver to print tokens without invoking the parser.
+- This keeps week 6 isolated from later parser and analysis stages.
 
 ## Week-6 Test Result Snapshot
 Command used:
 ```bash
-cd src
-./compiler ../test/week7/valid/test3.c
+make week6
 ```
 Observed diagnostics:
-- `Security note (line 1): sensitive identifier 'token'`
-- `Security note (line 2): sensitive identifier 'token'`
-- `Security warning (line 3): unsafe function 'strcpy'`
-- `Parse successful`
+- token output includes token name, source lexeme, line number, and literal value for `NUMBER`, `ID`, and `STRING`
