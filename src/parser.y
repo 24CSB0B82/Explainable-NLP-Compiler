@@ -5,6 +5,7 @@
 
 #include "ast.h"
 #include "correctness_analysis.h"
+#include "explanation_engine.h"
 #include "security_audit.h"
 #include "symbol_table.h"
 
@@ -51,6 +52,7 @@ static void set_decl_type(const char *type_name) {
 
 static void report_undeclared(const char *name, int line) {
     fprintf(stderr, "Semantic error (line %d): '%s' used before declaration\n", line, name);
+    explanation_emit(stderr, DIAG_SEVERITY_ERROR, DIAG_RULE_UNDECLARED_IDENTIFIER, line, name);
     semantic_error_count++;
 }
 %}
@@ -311,6 +313,10 @@ int main(int argc, char **argv) {
         } else if (strcmp(argv[i], "--week10") == 0) {
             enable_correctness_analysis = 1;
             enable_security_audit = 1;
+        } else if (strcmp(argv[i], "--week13") == 0) {
+            enable_correctness_analysis = 1;
+            enable_security_audit = 1;
+            explanation_set_enabled(1);
         } else {
             input_path = argv[i];
         }
@@ -370,5 +376,11 @@ int main(int argc, char **argv) {
 int yyerror(const char *s) {
     syntax_error_count++;
     fprintf(stderr, "Syntax error at line %d: %s\n", yylineno, s);
+    if (strcmp(s, "missing ';' after assignment") == 0 ||
+        strcmp(s, "missing ';' after function call") == 0) {
+        explanation_emit(stderr, DIAG_SEVERITY_ERROR, DIAG_RULE_MISSING_SEMICOLON, yylineno, NULL);
+    } else {
+        explanation_emit(stderr, DIAG_SEVERITY_ERROR, DIAG_RULE_SYNTAX_GENERIC, yylineno, NULL);
+    }
     return 0;
 }

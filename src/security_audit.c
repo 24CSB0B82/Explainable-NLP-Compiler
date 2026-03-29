@@ -1,4 +1,5 @@
 #include "security_audit.h"
+#include "explanation_engine.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -8,11 +9,25 @@ typedef struct {
 } SecurityAuditContext;
 
 static void report_security_warning(SecurityAuditContext *ctx, int line, const char *message, const char *name) {
+    DiagnosticRule rule = DIAG_RULE_DANGEROUS_FUNCTION;
+
     if (name != NULL) {
         fprintf(stderr, "Security warning (line %d): %s '%s'\n", line, message, name);
     } else {
         fprintf(stderr, "Security warning (line %d): %s\n", line, message);
     }
+
+    if (strcmp(message, "hard-coded credential assigned to") == 0) {
+        rule = DIAG_RULE_HARDCODED_CREDENTIAL;
+    } else if (strcmp(message, "dangerous function usage") == 0) {
+        rule = DIAG_RULE_DANGEROUS_FUNCTION;
+    } else if (strcmp(message, "weak random number generation using") == 0) {
+        rule = DIAG_RULE_WEAK_RANDOM;
+    } else if (strcmp(message, "predictable random seed in") == 0) {
+        rule = DIAG_RULE_PREDICTABLE_SEED;
+    }
+
+    explanation_emit(stderr, DIAG_SEVERITY_WARNING, rule, line, name);
     ctx->warning_count++;
 }
 

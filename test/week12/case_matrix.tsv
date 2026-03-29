@@ -1,0 +1,7 @@
+W12-SYN-01	syntax	-	test/week7/invalid/test2_bad_expr.c
+W12-COR-01	correctness	--week9	test/week9/test_week9_use_before_initialization.c
+W12-COR-02	correctness	--week9	test/week9/test_week9_unreachable_code.c
+W12-SEC-01	security	--week10	test/week10/test_week10_hardcoded_password.c
+W12-SEC-02	security	--week10	test/week10/test_week10_dangerous_calls.c
+W12-SEC-03	security	--week10	test/week10/test_week10_weak_rng.c
+W12-CTL-01	control	--week10	test/week10/test_week10_clean_control.c

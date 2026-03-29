@@ -2,18 +2,23 @@
 docs/Phase_3_Week_5_6_.pdf
 
 # Executables
+/src/lexer_driver
+/src/compiler
 lexer_driver
 compiler
-.a.out
+a.out
 *.out
 
 # Object files
 *.o
 
 # Flex generated
+/src/lex.yy.c
 lex.yy.c
 
 # Bison generated
+/src/parser.tab.c
+/src/parser.tab.h
 parser.tab.c
 parser.tab.h
 y.tab.c

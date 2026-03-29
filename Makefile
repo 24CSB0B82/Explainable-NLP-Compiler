@@ -10,6 +10,8 @@ WEEK7_INVALID_DIR = $(TEST_DIR)/week7/invalid
 WEEK8_DIR = $(TEST_DIR)/week8
 WEEK9_DIR = $(TEST_DIR)/week9
 WEEK10_DIR = $(TEST_DIR)/week10
+WEEK12_DIR = $(TEST_DIR)/week12
+WEEK13_DIR = $(TEST_DIR)/week13
 
 PARSER_SRC = $(SRC_DIR)/parser.y
 LEXER_SRC = $(SRC_DIR)/lexer.l
@@ -23,11 +25,15 @@ CORRECTNESS_C = $(SRC_DIR)/correctness_analysis.c
 SECURITY_AUDIT_C = $(SRC_DIR)/security_audit.c
 COMPILER_BIN = $(SRC_DIR)/compiler
 LEXER_DRIVER_BIN = $(SRC_DIR)/lexer_driver
+TEST_SCRIPT_DIR = $(TEST_DIR)/scripts
+WEEK11_SCRIPT = $(TEST_SCRIPT_DIR)/week11_validate.sh
+WEEK12_SCRIPT = $(TEST_SCRIPT_DIR)/week12_compare.sh
+WEEK13_SCRIPT = $(TEST_SCRIPT_DIR)/week13_explain.sh
 
 CFLAGS = -Wall -Wextra -std=gnu11
 LDFLAGS = -lfl
 
-.PHONY: all help build clean test test-week6 test-valid test-invalid test-semantic test-week8 test-week9 test-week10 week6 week7 week8 week9 week10
+.PHONY: all help build clean test test-week6 test-valid test-invalid test-semantic test-week8 test-week9 test-week10 test-week11 test-week12 test-week13 week6 week7 week8 week9 week10 week11 week12 week13
 
 all: build
 
@@ -40,6 +46,9 @@ help:
 	@echo "  make week8   - run week 8 semantic tests"
 	@echo "  make week9   - run week 9 correctness tests"
 	@echo "  make week10  - run week 10 security warning tests"
+	@echo "  make week11  - run week 11 validation summary"
+	@echo "  make week12  - run week 12 comparison and metrics"
+	@echo "  make week13  - run week 13 explanation samples"
 	@echo "  make clean   - remove generated build files"
 
 build: $(COMPILER_BIN)
@@ -56,11 +65,11 @@ $(LEXER_DRIVER_BIN): $(LEXER_C) $(LEXER_DRIVER_C)
 	$(CC) $(CFLAGS) $(LEXER_DRIVER_C) $(LEXER_C) -o $(LEXER_DRIVER_BIN) $(LDFLAGS)
 
 # Final compiler binary.
-$(COMPILER_BIN): $(PARSER_C) $(LEXER_C) $(AST_C) $(SYMTAB_C) $(CORRECTNESS_C) $(SECURITY_AUDIT_C)
-	$(CC) $(CFLAGS) $(PARSER_C) $(LEXER_C) $(AST_C) $(SYMTAB_C) $(CORRECTNESS_C) $(SECURITY_AUDIT_C) -o $(COMPILER_BIN) $(LDFLAGS)
+$(COMPILER_BIN): $(PARSER_C) $(LEXER_C) $(AST_C) $(SYMTAB_C) $(CORRECTNESS_C) $(SECURITY_AUDIT_C) $(SRC_DIR)/explanation_engine.c
+	$(CC) $(CFLAGS) $(PARSER_C) $(LEXER_C) $(AST_C) $(SYMTAB_C) $(CORRECTNESS_C) $(SECURITY_AUDIT_C) $(SRC_DIR)/explanation_engine.c -o $(COMPILER_BIN) $(LDFLAGS)
 
 # Aggregate targets.
-test: test-week6 test-valid test-invalid test-semantic test-week10
+test: test-week6 test-valid test-invalid test-semantic test-week10 test-week11 test-week12 test-week13
 
 # Week 6: lexer token dump validation.
 test-week6: $(LEXER_DRIVER_BIN)
@@ -115,6 +124,21 @@ test-week10: build
 		echo ""; \
 	done
 
+# Week 11: validation summary over correctness and security suites.
+test-week11: build
+	@echo "Running week 11 validation...\n"
+	@bash $(WEEK11_SCRIPT)
+
+# Week 12: comparison with traditional compiler diagnostics and performance metrics.
+test-week12: build
+	@echo "Running week 12 comparison...\n"
+	@bash $(WEEK12_SCRIPT)
+
+# Week 13: explanation engine samples.
+test-week13: build
+	@echo "Running week 13 explanations...\n"
+	@bash $(WEEK13_SCRIPT)
+
 test-semantic: test-week8 test-week9
 
 week6: test-week6
@@ -126,6 +150,12 @@ week8: build test-week8
 week9: build test-week9
 
 week10: build test-week10
+
+week11: build test-week11
+
+week12: build test-week12
+
+week13: build test-week13
 
 clean:
 	rm -f $(COMPILER_BIN) $(LEXER_DRIVER_BIN) $(PARSER_C) $(PARSER_H) $(LEXER_C)

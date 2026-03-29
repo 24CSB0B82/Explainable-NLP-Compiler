@@ -1,4 +1,5 @@
 #include "symbol_table.h"
+#include "explanation_engine.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,6 +92,7 @@ int symtab_declare(const char *name, const char *type, int line) {
             fprintf(stderr,
                     "Semantic error (line %d): redeclaration of '%s' in scope %d\n",
                     line, name, scope_stack->level);
+            explanation_emit(stderr, DIAG_SEVERITY_ERROR, DIAG_RULE_REDECLARATION, line, name);
             return 0;
         }
         cursor = cursor->next;
