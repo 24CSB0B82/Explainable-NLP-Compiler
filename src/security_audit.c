@@ -11,10 +11,12 @@ typedef struct {
 static void report_security_warning(SecurityAuditContext *ctx, int line, const char *message, const char *name) {
     DiagnosticRule rule = DIAG_RULE_DANGEROUS_FUNCTION;
 
-    if (name != NULL) {
-        fprintf(stderr, "Security warning (line %d): %s '%s'\n", line, message, name);
-    } else {
-        fprintf(stderr, "Security warning (line %d): %s\n", line, message);
+    if (!explanation_is_enabled()) {
+        if (name != NULL) {
+            fprintf(stderr, "Security warning (line %d): %s '%s'\n", line, message, name);
+        } else {
+            fprintf(stderr, "Security warning (line %d): %s\n", line, message);
+        }
     }
 
     if (strcmp(message, "hard-coded credential assigned to") == 0) {

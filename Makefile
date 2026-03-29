@@ -12,6 +12,7 @@ WEEK9_DIR = $(TEST_DIR)/week9
 WEEK10_DIR = $(TEST_DIR)/week10
 WEEK12_DIR = $(TEST_DIR)/week12
 WEEK13_DIR = $(TEST_DIR)/week13
+WEEK14_DIR = $(TEST_DIR)/week14
 
 PARSER_SRC = $(SRC_DIR)/parser.y
 LEXER_SRC = $(SRC_DIR)/lexer.l
@@ -29,11 +30,13 @@ TEST_SCRIPT_DIR = $(TEST_DIR)/scripts
 WEEK11_SCRIPT = $(TEST_SCRIPT_DIR)/week11_validate.sh
 WEEK12_SCRIPT = $(TEST_SCRIPT_DIR)/week12_compare.sh
 WEEK13_SCRIPT = $(TEST_SCRIPT_DIR)/week13_explain.sh
+WEEK14_SCRIPT = $(TEST_SCRIPT_DIR)/week14_final_integration.sh
 
 CFLAGS = -Wall -Wextra -std=gnu11
+FLEX_GENERATED_CFLAGS = -Wno-unused-function
 LDFLAGS = -lfl
 
-.PHONY: all help build clean test test-week6 test-valid test-invalid test-semantic test-week8 test-week9 test-week10 test-week11 test-week12 test-week13 week6 week7 week8 week9 week10 week11 week12 week13
+.PHONY: all help build clean test test-week6 test-valid test-invalid test-semantic test-week8 test-week9 test-week10 test-week11 test-week12 test-week13 test-week14 week6 week7 week8 week9 week10 week11 week12 week13 week14
 
 all: build
 
@@ -49,6 +52,7 @@ help:
 	@echo "  make week11  - run week 11 validation summary"
 	@echo "  make week12  - run week 12 comparison and metrics"
 	@echo "  make week13  - run week 13 explanation samples"
+	@echo "  make week14  - run final integrated NLP validation"
 	@echo "  make clean   - remove generated build files"
 
 build: $(COMPILER_BIN)
@@ -62,14 +66,14 @@ $(LEXER_C): $(LEXER_SRC) $(PARSER_H)
 
 # Standalone lexer driver for week 6 token dumps.
 $(LEXER_DRIVER_BIN): $(LEXER_C) $(LEXER_DRIVER_C)
-	$(CC) $(CFLAGS) $(LEXER_DRIVER_C) $(LEXER_C) -o $(LEXER_DRIVER_BIN) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(FLEX_GENERATED_CFLAGS) $(LEXER_DRIVER_C) $(LEXER_C) -o $(LEXER_DRIVER_BIN) $(LDFLAGS)
 
 # Final compiler binary.
 $(COMPILER_BIN): $(PARSER_C) $(LEXER_C) $(AST_C) $(SYMTAB_C) $(CORRECTNESS_C) $(SECURITY_AUDIT_C) $(SRC_DIR)/explanation_engine.c
-	$(CC) $(CFLAGS) $(PARSER_C) $(LEXER_C) $(AST_C) $(SYMTAB_C) $(CORRECTNESS_C) $(SECURITY_AUDIT_C) $(SRC_DIR)/explanation_engine.c -o $(COMPILER_BIN) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(FLEX_GENERATED_CFLAGS) $(PARSER_C) $(LEXER_C) $(AST_C) $(SYMTAB_C) $(CORRECTNESS_C) $(SECURITY_AUDIT_C) $(SRC_DIR)/explanation_engine.c -o $(COMPILER_BIN) $(LDFLAGS)
 
 # Aggregate targets.
-test: test-week6 test-valid test-invalid test-semantic test-week10 test-week11 test-week12 test-week13
+test: test-week6 test-valid test-invalid test-semantic test-week10 test-week11 test-week12 test-week13 test-week14
 
 # Week 6: lexer token dump validation.
 test-week6: $(LEXER_DRIVER_BIN)
@@ -139,6 +143,11 @@ test-week13: build
 	@echo "Running week 13 explanations...\n"
 	@bash $(WEEK13_SCRIPT)
 
+# Week 14: final integrated NLP validation.
+test-week14: build
+	@echo "Running week 14 final integration...\n"
+	@bash $(WEEK14_SCRIPT)
+
 test-semantic: test-week8 test-week9
 
 week6: test-week6
@@ -156,6 +165,8 @@ week11: build test-week11
 week12: build test-week12
 
 week13: build test-week13
+
+week14: build test-week14
 
 clean:
 	rm -f $(COMPILER_BIN) $(LEXER_DRIVER_BIN) $(PARSER_C) $(PARSER_H) $(LEXER_C)

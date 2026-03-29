@@ -88,12 +88,12 @@ while IFS=$'\t' read -r case_id category mode file; do
     custom_output="$(run_custom "$mode" "$file")"
     gcc_output="$(run_gcc_compare "$file")"
 
-    if printf "%s" "$custom_output" | grep -Eq "Syntax error|Correctness error|Security warning|Parse successful"; then
-        if printf "%s" "$custom_output" | grep -q "Syntax error"; then
+    if printf "%s" "$custom_output" | grep -Eq "Type: Syntax Error|Type: Correctness Error|Type: Security Warning|Syntax error|Correctness error|Security warning|Parse successful"; then
+        if printf "%s" "$custom_output" | grep -Eq "Type: Syntax Error|Syntax error"; then
             custom_status="syntax diagnostic"
-        elif printf "%s" "$custom_output" | grep -q "Correctness error"; then
+        elif printf "%s" "$custom_output" | grep -Eq "Type: Correctness Error|Correctness error"; then
             custom_status="correctness diagnostic"
-        elif printf "%s" "$custom_output" | grep -q "Security warning"; then
+        elif printf "%s" "$custom_output" | grep -Eq "Type: Security Warning|Security warning"; then
             custom_status="security warning"
         else
             custom_status="clean success"

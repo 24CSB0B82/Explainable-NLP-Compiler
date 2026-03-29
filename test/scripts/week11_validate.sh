@@ -59,42 +59,42 @@ run_case \
     "--week9" \
     "$ROOT_DIR/test/week9/test_week9_use_before_initialization.c" \
     1 \
-    "use before initialization"
+    "used before initialization"
 
 run_case \
     "Correctness: unreachable code" \
     "--week9" \
     "$ROOT_DIR/test/week9/test_week9_unreachable_code.c" \
     1 \
-    "unreachable statement"
+    "Unreachable statement detected"
 
 run_case \
     "Correctness: unused variables" \
     "--week9" \
     "$ROOT_DIR/test/week9/test_week9_unused_variables.c" \
     1 \
-    "unused variable"
+    "declared but never used"
 
 run_case \
     "Security: dangerous calls" \
     "--week10" \
     "$ROOT_DIR/test/week10/test_week10_dangerous_calls.c" \
     0 \
-    "dangerous function usage"
+    "Dangerous function usage detected"
 
 run_case \
     "Security: hard-coded credential" \
     "--week10" \
     "$ROOT_DIR/test/week10/test_week10_hardcoded_password.c" \
     0 \
-    "hard-coded credential"
+    "Hard-coded credential detected"
 
 run_case \
     "Security: weak RNG" \
     "--week10" \
     "$ROOT_DIR/test/week10/test_week10_weak_rng.c" \
     0 \
-    "weak random number generation"
+    "Weak random number generation detected"
 
 run_case \
     "Validation: clean control has no security warnings" \

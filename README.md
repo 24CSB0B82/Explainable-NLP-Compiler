@@ -1,141 +1,130 @@
 # Explainable NLP Compiler for Security Audits
 
-This project implements a **restricted C compiler with explainable diagnostics** to detect correctness errors and security issues in programs.
+This project implements a restricted C compiler front-end with explainable diagnostics. It detects syntax, semantic, correctness, and security issues, then converts those findings into readable NLP-style explanations with suggested fixes.
 
-The compiler provides human-readable explanations for detected problems, improving the usability of static analysis tools.
+## Project Goal
+- build a restricted C compiler using Flex and Bison
+- detect correctness and security issues at compile time
+- generate human-readable explanations for detected issues
+- keep the project organized by weekly execution-plan phases
 
-It stands between: 
-1. Static Analysis
-2. Semantic Analysis
-3. Explainability using NLP
-
----
-
-## Project Architecture
-
-The compiler follows a standard front-end pipeline:
-
-Source Code
-    ↓
-Lexical Analysis (Flex)
-    ↓
-Syntax Analysis (Bison)
-    ↓
-AST Construction
-    ↓
-Symbol Table
-    ↓
+## Final Pipeline
+```text
+Source Program
+    |
+    v
+Lexer (Flex)
+    |
+    v
+Parser (Bison)
+    |
+    v
+   AST
+    |
+    v
+Symbol Table / Semantic Checks
+    |
+    v
 Correctness Analysis
-    ↓
-Explainable Diagnostics
+    |
+    v
+Security Audit
+    |
+    v
+NLP Explanation Engine
+```
 
----
+## Core Features
+- lexical analysis for restricted C tokens
+- syntax analysis with recovery for malformed inputs
+- AST construction for parsed programs
+- symbol table with scope-aware declaration checks
+- correctness analysis:
+  - use before initialization
+  - unreachable statements
+  - unused variables
+- security audit:
+  - hard-coded credentials
+  - dangerous function usage
+  - weak RNG and predictable seeding
+- rule-based explanation engine with:
+  - `Error:` or `Warning:`
+  - `Type:`
+  - `Explanation:`
+  - `Fix:`
 
 ## Project Structure
-Explainable-NLP-Compiler
-│
-├── docs → Weekly reports and documentation
-├── src → Compiler source code
-├── test → Test programs
-├── Makefile → Build automation
-└── .gitignore
+- `src/` : compiler source files
+- `docs/` : weekly reports and final documentation
+- `test/` : week-based test inputs, matrices, and scripts
+- `Makefile` : build and test automation
 
----
+## Main Files
+- `src/lexer.l`
+- `src/parser.y`
+- `src/ast.c`
+- `src/ast.h`
+- `src/symbol_table.c`
+- `src/symbol_table.h`
+- `src/correctness_analysis.c`
+- `src/correctness_analysis.h`
+- `src/security_audit.c`
+- `src/security_audit.h`
+- `src/explanation_engine.c`
+- `src/explanation_engine.h`
 
-## Modules
+## Build Requirements
+- `gcc`
+- `flex`
+- `bison`
+- `make`
 
-### Lexical Analysis
-Implemented using **Flex**.
+## Build
+```bash
+make build
+```
 
-File: src/lexer.l
+## Run
+Week-based usage examples:
 
-Responsible for:
-- Tokenization
-- Keyword recognition
-- Identifier detection
+```bash
+make week6
+make week10
+make week14
+```
 
----
+Direct compiler usage:
 
-### Syntax Analysis
+```bash
+./src/compiler test/week7/valid/test1.c
+./src/compiler --week10 test/week10/test_week10_dangerous_calls.c
+./src/compiler --week14 test/week9/test_week9_use_before_initialization.c
+```
 
-Implemented using **Bison**.
+## Final Output Style
+```text
+Error: Variable is used before initialization. Subject: 'value'. Line: 4.
+Type: Correctness Error
+Explanation: The variable is read before the program assigns any value to it on the reachable path.
+Fix: Initialize the variable at declaration time or assign to it before using it.
+```
 
-File: src/parser.y
+## Make Targets
+- `make week6` : lexer token-dump validation
+- `make week7` : syntax validation
+- `make week8` : semantic validation
+- `make week9` : correctness validation
+- `make week10` : security validation
+- `make week11` : testing and validation summary
+- `make week12` : comparison and benchmarking
+- `make week13` : explanation samples
+- `make week14` : final integrated NLP validation
+- `make test` : full project test suite
 
-Handles:
-
-- Grammar validation
-- Operator precedence
-- Syntax error detection
-
----
-
-### AST Construction
-
-Files: src/ast.c, src/ast.h
-
-Creates the **Abstract Syntax Tree** used by later analysis phases.
-
----
-
-### Symbol Table
-
-Files: src/symbol_table.c, src/symbol_table.h
-
-Tracks:
-
-- Variables
-- Scope
-- Declarations
-
----
-
-### Correctness Analysis
-
-Files: src/correctness_analysis.c, src/correctness_analysis.h
-
-Detects:
-
-- Use-before-initialization
-- Unused variables
-- Unreachable code
-
----
-
-## Build Instructions
-
-Requirements:
-
-- GCC
-- Flex
-- Bison
-- Make
-
-Compile: make
-
----
-
-## Run the Compiler
-
-Example: ./compiler test/week7/valid/test1.c
-
----
-
-## Sample Output
-ERROR: Variable 'x' used before initialization.
-WARNING: Unreachable code detected.
-
----
-
-## Future Work
-
-- Security audit rule detection
-- NLP-based explanation engine
-- Integration with static analysis tools
-
----
+## Documentation
+- `docs/week14_final_integration_report.md`
+- `docs/final_project_report.md`
+- `test/README.md`
 
 ## Author
-
 Sai Jaswanth
-B.Tech Computer Science

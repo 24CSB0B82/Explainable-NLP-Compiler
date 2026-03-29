@@ -1,0 +1,10 @@
+W14-SYN-01	syntax	--week14	test/week7/invalid/test1_missing_semicolon.c	1	Type: Syntax Error
+W14-SEM-01	semantic	--week14	test/week8/test_week8_use_before_declaration.c	1	Type: Semantic Error
+W14-SEM-02	semantic	--week14	test/week8/test_week8_redeclaration.c	1	Type: Semantic Error
+W14-COR-01	correctness	--week14	test/week9/test_week9_use_before_initialization.c	1	Type: Correctness Error
+W14-COR-02	correctness	--week14	test/week9/test_week9_unreachable_code.c	1	Type: Correctness Error
+W14-COR-03	correctness	--week14	test/week9/test_week9_unused_variables.c	1	Type: Correctness Error
+W14-SEC-01	security	--week14	test/week10/test_week10_hardcoded_password.c	0	Type: Security Warning
+W14-SEC-02	security	--week14	test/week10/test_week10_dangerous_calls.c	0	Type: Security Warning
+W14-SEC-03	security	--week14	test/week10/test_week10_weak_rng.c	0	Type: Security Warning
+W14-CTL-01	control	--week14	test/week10/test_week10_clean_control.c	0	Parse successful

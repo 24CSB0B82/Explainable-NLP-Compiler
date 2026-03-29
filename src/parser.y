@@ -51,7 +51,9 @@ static void set_decl_type(const char *type_name) {
 }
 
 static void report_undeclared(const char *name, int line) {
-    fprintf(stderr, "Semantic error (line %d): '%s' used before declaration\n", line, name);
+    if (!explanation_is_enabled()) {
+        fprintf(stderr, "Semantic error (line %d): '%s' used before declaration\n", line, name);
+    }
     explanation_emit(stderr, DIAG_SEVERITY_ERROR, DIAG_RULE_UNDECLARED_IDENTIFIER, line, name);
     semantic_error_count++;
 }
@@ -310,10 +312,16 @@ int main(int argc, char **argv) {
         } else if (strcmp(argv[i], "--week9") == 0) {
             enable_correctness_analysis = 1;
             enable_security_audit = 0;
+            explanation_set_enabled(1);
         } else if (strcmp(argv[i], "--week10") == 0) {
             enable_correctness_analysis = 1;
             enable_security_audit = 1;
+            explanation_set_enabled(1);
         } else if (strcmp(argv[i], "--week13") == 0) {
+            enable_correctness_analysis = 1;
+            enable_security_audit = 1;
+            explanation_set_enabled(1);
+        } else if (strcmp(argv[i], "--week14") == 0) {
             enable_correctness_analysis = 1;
             enable_security_audit = 1;
             explanation_set_enabled(1);
@@ -342,22 +350,26 @@ int main(int argc, char **argv) {
     }
 
     if (parse_result == 0 && syntax_error_count == 0 && semantic_error_count == 0) {
-        printf("Parse successful\n");
-        if (ast_root != NULL) {
+        if (explanation_is_enabled()) {
+            fprintf(stderr, "Parse successful\n");
+        } else {
+            printf("Parse successful\n");
+        }
+        if (!explanation_is_enabled() && ast_root != NULL) {
             printf("\nAST:\n");
             ast_print(ast_root, 0);
         }
-        if (security_warning_count > 0) {
+        if (!explanation_is_enabled() && security_warning_count > 0) {
             fprintf(stderr, "Security audit reported %d warning(s)\n", security_warning_count);
         }
     } else {
-        if (parse_result == 0 && syntax_error_count > 0) {
+        if (!explanation_is_enabled() && parse_result == 0 && syntax_error_count > 0) {
             fprintf(stderr, "Parse completed with %d syntax error(s)\n", syntax_error_count);
         }
-        if (semantic_error_count > 0) {
+        if (!explanation_is_enabled() && semantic_error_count > 0) {
             fprintf(stderr, "Semantic analysis found %d issue(s)\n", semantic_error_count);
         }
-        if (security_warning_count > 0) {
+        if (!explanation_is_enabled() && security_warning_count > 0) {
             fprintf(stderr, "Security audit reported %d warning(s)\n", security_warning_count);
         }
         parse_result = 1;
@@ -375,7 +387,9 @@ int main(int argc, char **argv) {
 
 int yyerror(const char *s) {
     syntax_error_count++;
-    fprintf(stderr, "Syntax error at line %d: %s\n", yylineno, s);
+    if (!explanation_is_enabled()) {
+        fprintf(stderr, "Syntax error at line %d: %s\n", yylineno, s);
+    }
     if (strcmp(s, "missing ';' after assignment") == 0 ||
         strcmp(s, "missing ';' after function call") == 0) {
         explanation_emit(stderr, DIAG_SEVERITY_ERROR, DIAG_RULE_MISSING_SEMICOLON, yylineno, NULL);

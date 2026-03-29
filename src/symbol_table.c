@@ -89,9 +89,11 @@ int symtab_declare(const char *name, const char *type, int line) {
     cursor = scope_stack->symbols;
     while (cursor != NULL) {
         if (strcmp(cursor->name, name) == 0) {
-            fprintf(stderr,
-                    "Semantic error (line %d): redeclaration of '%s' in scope %d\n",
-                    line, name, scope_stack->level);
+            if (!explanation_is_enabled()) {
+                fprintf(stderr,
+                        "Semantic error (line %d): redeclaration of '%s' in scope %d\n",
+                        line, name, scope_stack->level);
+            }
             explanation_emit(stderr, DIAG_SEVERITY_ERROR, DIAG_RULE_REDECLARATION, line, name);
             return 0;
         }

@@ -44,10 +44,12 @@ static char *analysis_strdup(const char *s) {
 static void report_correctness_error(AnalysisContext *ctx, int line, const char *message, const char *name) {
     DiagnosticRule rule = DIAG_RULE_SYNTAX_GENERIC;
 
-    if (name != NULL) {
-        fprintf(stderr, "Correctness error (line %d): %s '%s'\n", line, message, name);
-    } else {
-        fprintf(stderr, "Correctness error (line %d): %s\n", line, message);
+    if (!explanation_is_enabled()) {
+        if (name != NULL) {
+            fprintf(stderr, "Correctness error (line %d): %s '%s'\n", line, message, name);
+        } else {
+            fprintf(stderr, "Correctness error (line %d): %s\n", line, message);
+        }
     }
 
     if (strcmp(message, "unused variable") == 0) {

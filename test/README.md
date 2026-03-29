@@ -14,6 +14,8 @@ This project organizes tests by implementation week so the folder structure matc
 - `test/scripts/week12_compare.sh` : week 12 comparative evaluation and performance runner
 - `test/week13` : explanation samples for syntax, correctness, and security findings
 - `test/scripts/week13_explain.sh` : week 13 explanation runner
+- `test/week14/nlp_case_matrix.tsv` : week 14 final NLP coverage matrix across syntax, semantic, correctness, security, and clean control cases
+- `test/scripts/week14_final_integration.sh` : week 14 integrated validation runner for final prototype behavior
 
 ## Make Targets
 - `make week6` : runs the lexer-only token-dump driver
@@ -24,4 +26,5 @@ This project organizes tests by implementation week so the folder structure matc
 - `make week11` : runs validation checks and prints a pass/fail summary
 - `make week12` : runs comparative evaluation and performance metrics
 - `make week13` : runs sample NLP-style explanations
+- `make week14` : runs final integrated NLP validation across all diagnostic categories
 - `make test` : runs the full test suite
