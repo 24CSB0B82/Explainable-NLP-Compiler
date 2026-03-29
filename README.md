@@ -55,7 +55,7 @@ NLP Explanation Engine
 
 ## Project Structure
 - `src/` : compiler source files
-- `docs/` : weekly reports and final documentation
+- `docs/` : final PDF documents for presentation and submission
 - `test/` : week-based test inputs, matrices, and scripts
 - `Makefile` : build and test automation
 
@@ -122,8 +122,7 @@ Fix: Initialize the variable at declaration time or assign to it before using it
 - `make test` : full project test suite
 
 ## Documentation
-- `docs/week14_final_integration_report.md`
-- `docs/final_project_report.md`
+- `docs/final_project_report.pdf`
 - `test/README.md`
 
 ## Author
